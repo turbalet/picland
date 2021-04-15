@@ -1,0 +1,206 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+    width: 0;
+}
+
+html {
+    height: 100%;
+    width: 100%;
+    background-color: black;
+}
+
+body {
+    background-color: black;
+}
+
+.head {
+    width: 100%;
+    height: 10%;
+    padding: 4% 5%;
+    display: flex;
+    flex-direction: row;
+    background-color: black;
+}
+
+.head .logo {
+    width: 10%;
+    font-size: calc(1.5vmin + 2vmax);
+    font-family: 'Varta', sans-serif;
+    font-style: normal;
+    letter-spacing: 0.08em;
+}
+
+.head .search {
+    margin: auto 0;
+    width: 80%;
+    height: 90%;
+}
+
+.head .search button,
+.head .search input {
+    background-color: rgba(255, 255, 255, 0.55);
+    border: none;
+    outline: none;
+}
+
+.head .search button {
+    width: 5%;
+    border-radius: 10px 0 0 10px;
+}
+
+.head .search input {
+    width: 80%;
+    border-radius: 0 10px 10px 0;
+}
+
+.head .search input::placeholder {
+    color: white;
+    font-family: 'Varta', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+}
+
+.head .search button img {
+    width: 15px;
+    padding: 10px 0;
+}
+
+.head .user-img {
+    margin: auto 0;
+    width: 2.5vmax;
+    height: 2.5vmax;
+    border-radius: 100%;
+    background: center/cover no-repeat;
+}
+
+.album-layout {
+    width: 100%;
+    padding: 0 5%;
+    column-count: 5;
+    column-gap: 25px;
+    background-color: black;
+}
+
+.album-layout .element {
+    width: 100%;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.album-layout .element img {
+    border-radius: 10px;
+    height: 100%;
+    width: 100%;
+    height: auto;
+    transition: .3s ease;
+}
+
+
+/* 
+.album-layout .element:hover img {
+    filter: blur(3px);
+} */
+
+.album-layout .element .onhover {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 10px;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .3s ease;
+    box-shadow: 0px 1px 24px rgba(0, 0, 0, 0.05);
+    background: linear-gradient(110deg, rgba(255, 255, 255, 0.55) -8%, rgba(255, 255, 255, 0.35) 92%);
+}
+
+.album-layout .element .onhover p {
+    position: absolute;
+    font-family: 'Varta', sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 2vmax;
+    text-align: center;
+    width: 90%;
+    bottom: 6px;
+    left: 5%;
+}
+
+.album-layout .element:hover .onhover {
+    opacity: 1;
+}
+
+.album-layout .element .info {
+    display: flex;
+    flex-direction: row;
+    padding: 4% 2%;
+    font-family: 'Varta', sans-serif;
+    font-style: normal;
+    font-size: 1.5vmax;
+}
+
+.album-layout .element .info .user-img {
+    width: 4vmin;
+    height: 4vmin;
+    background: center/cover no-repeat;
+    border-radius: 100%;
+    margin-right: 10px;
+}
+
+.whenhover .pin {
+    opacity: 1;
+    padding: 1%;
+    width: 4vmin;
+    height: 4vmin;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border-radius: 100%;
+    border: none;
+    background: center/cover no-repeat;
+}
+
+.whenhover .categoryList {
+    opacity: 1;
+    list-style: none;
+    display: block;
+    overflow-y: scroll;
+    background-color: white;
+    position: absolute;
+    top: 15%;
+    left: 5%;
+    border-radius: 8px;
+    width: 90%;
+    max-height: 50%;
+}
+
+.whenhover .categoryList li {
+    width: 100%;
+    padding: 3% 4%;
+    border-bottom: 1px solid gainsboro;
+    font-family: 'Varta', sans-serif;
+    font-style: normal;
+    font-size: 1.2vmax;
+}
+
+.whenhover .categoryList li:hover {
+    background-color: gainsboro;
+}
+
+@media(max-width:770px) {
+    .head .user-img {
+        width: 4.5vmin;
+        height: 4.5vmin;
+    }
+    .album-layout {
+        column-count: 4;
+        column-gap: 15px;
+    }
+}
