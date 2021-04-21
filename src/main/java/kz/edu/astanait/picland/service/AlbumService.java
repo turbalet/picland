@@ -1,0 +1,49 @@
+package kz.edu.astanait.picland.service;
+
+import kz.edu.astanait.picland.exception.EntityNotFoundException;
+import kz.edu.astanait.picland.model.Album;
+import kz.edu.astanait.picland.model.UserDetailsImpl;
+import kz.edu.astanait.picland.repository.AlbumRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.security.Principal;
+import java.util.List;
+
+@Service
+@AllArgsConstructor
+@Transactional
+public class AlbumService {
+
+    private final AlbumRepository albumRepository;
+
+    public List<Album> findAllAlbums(){
+        return albumRepository.findAll();
+    }
+
+    public Album findAlbum(Long albumId){
+        return albumRepository.findById(albumId)
+                .orElseThrow(() -> new EntityNotFoundException(Album.class, "id", albumId.toString()));
+    }
+
+    public List<Album> findUserAlbums(Long userId, Principal principal){
+        if(userId.equals(((UserDetailsImpl) principal).getUser().getUserId())){
+            return albumRepository.getAlbumsByUserUserIdAndIsPrivateFalse(userId);
+        }
+        return albumRepository.getAlbumsByUserUserId(userId);
+    }
+
+    public void saveAlbum(Album album){
+        albumRepository.save(album);
+    }
+
+    public Album updateAlbum(Album album){
+        return albumRepository.save(album);
+    }
+
+    public void deleteAlbum(Long albumId){
+        albumRepository.deleteById(albumId);
+    }
+
+}
