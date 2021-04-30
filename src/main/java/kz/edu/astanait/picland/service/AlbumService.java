@@ -1,9 +1,11 @@
 package kz.edu.astanait.picland.service;
 
 import kz.edu.astanait.picland.exception.EntityNotFoundException;
+import kz.edu.astanait.picland.exception.ForbiddenException;
 import kz.edu.astanait.picland.model.Album;
-import kz.edu.astanait.picland.model.UserDetailsImpl;
+import kz.edu.astanait.picland.model.User;
 import kz.edu.astanait.picland.repository.AlbumRepository;
+import kz.edu.astanait.picland.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,20 +20,40 @@ public class AlbumService {
 
     private final AlbumRepository albumRepository;
 
+    private final UserRepository userRepository;
+
     public List<Album> findAllAlbums(){
         return albumRepository.findAll();
     }
 
-    public Album findAlbum(Long albumId){
-        return albumRepository.findById(albumId)
-                .orElseThrow(() -> new EntityNotFoundException(Album.class, "id", albumId.toString()));
+    public Album findAlbum(Long albumId, Principal principal){
+
+         Album album = albumRepository.findById(albumId).orElse(null);
+         if(album != null){
+             if(album.isPrivate()){
+                 if(album.getUser().getUsername().equals(principal.getName())){
+                     return album;
+                 }
+                 throw new ForbiddenException();
+             }
+             return album;
+         } else{
+             throw new EntityNotFoundException(Album.class, "id", albumId.toString());
+         }
     }
 
     public List<Album> findUserAlbums(Long userId, Principal principal){
-        if(userId.equals(((UserDetailsImpl) principal).getUser().getUserId())){
+        User currentUser = userRepository.findByUsername(principal.getName()).orElse(null);
+        User user = userRepository.findById(userId).orElse(null);
+        if (user != null){
+            if(user.getUserId().equals(currentUser.getUserId())){
+                return albumRepository.getAlbumsByUserUserId(userId);
+            }
             return albumRepository.getAlbumsByUserUserIdAndIsPrivateFalse(userId);
         }
-        return albumRepository.getAlbumsByUserUserId(userId);
+        else {
+            throw new EntityNotFoundException(User.class, "id", userId.toString());
+        }
     }
 
     public void saveAlbum(Album album){
