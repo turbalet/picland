@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="25dp"
+    android:background="#00C4C4C4"
+    android:paddingHorizontal="16dp"
+    android:paddingBottom="10dp">
+
+    <TextView
+        android:id="@+id/album_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:textSize="24dp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        tools:ignore="MissingConstraints" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="5dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/album_name"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
