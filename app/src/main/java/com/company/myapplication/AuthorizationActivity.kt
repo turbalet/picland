@@ -1,5 +1,6 @@
 package com.company.myapplication
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -34,7 +35,7 @@ class AuthorizationActivity : AppCompatActivity() {
             apiClient = ApiClient()
             sessionManager = SessionManager(this)
 
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, ProfilePageActivity::class.java)
 
             apiClient.getApiService().login(UserLogin(username = email, password = password))
                 .enqueue(object : Callback<LoginResponse> {
@@ -50,6 +51,11 @@ class AuthorizationActivity : AppCompatActivity() {
 
                         if (loginResponse != null) {
                             println("success!!!")
+                            val sharedPreference =  getSharedPreferences("PREFERENCE_NAME", Context.MODE_PRIVATE)
+                            var editor = sharedPreference.edit()
+                            editor.putString("username", email)
+                            editor.putString("email","kk@mail.com")
+                            editor.commit()
                             sessionManager.saveAuthToken(loginResponse.token)
                             startActivity(intent)
                         }

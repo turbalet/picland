@@ -55,7 +55,8 @@ class RegistrationActivity : AppCompatActivity() {
                         response: Response<SignUpResponse>
                     ) {
                         val loginResponse = response.body()
-                        val response = loginResponse?.response.toString()
+                        val response = "success"
+                                //loginResponse?.response.toString()
 
                         println(response)
 
