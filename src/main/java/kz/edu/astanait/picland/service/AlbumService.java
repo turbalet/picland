@@ -43,7 +43,7 @@ public class AlbumService {
     }
 
     public List<Album> findUserAlbums(Long userId, Principal principal){
-        User currentUser = userRepository.findByUsername(principal.getName()).orElse(null);
+        User currentUser = userRepository.findUserByUsername(principal.getName()).orElse(null);
         User user = userRepository.findById(userId).orElse(null);
         if (user != null){
             if(user.getUserId().equals(currentUser.getUserId())){

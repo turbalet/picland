@@ -1,11 +1,16 @@
 package kz.edu.astanait.picland.model;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "albums")
 public class Album {
 
@@ -25,8 +30,14 @@ public class Album {
     @Column(name = "is_private")
     private boolean isPrivate;
 
-    @ManyToOne
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "owner_id", nullable = false)
     private User user;
 
+    @ManyToMany( fetch = FetchType.EAGER)
+    @JoinTable(name = "pica_albums",
+            joinColumns = @JoinColumn(name = "album_id"),
+            inverseJoinColumns = @JoinColumn(name = "pica_id"))
+    @JsonIgnore
+    private Set<Pica> picas = new HashSet<>();
 }

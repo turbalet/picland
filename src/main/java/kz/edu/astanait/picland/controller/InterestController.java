@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -36,6 +37,18 @@ public class InterestController {
     @GetMapping("/user/{username}")
     public List<Interest> getUserInterests(@PathVariable("username") String username){
         return interestService.findUserInterests(username);
+    }
+
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    @PostMapping("user/add/{interestId}")
+    public ResponseEntity<?> addInterestToCurrentUser(@PathVariable("interestId") Long id,
+                                                      Principal principal) {
+        try{
+            interestService.addInterestToUser(id, principal);
+            return ResponseEntity.ok("Interest was successfully added");
+        } catch (Exception e){
+            return ResponseEntity.status(400).body(e.getMessage());
+        }
     }
 
     @PreAuthorize("hasRole('ADMIN')")

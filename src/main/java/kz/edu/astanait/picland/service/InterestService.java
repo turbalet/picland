@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -30,7 +31,7 @@ public class InterestService {
     }
 
     public List<Interest> findUserInterests(String username){
-        User user = userRepository.findByUsername(username).orElse(null);
+        User user = userRepository.findUserByUsername(username).orElse(null);
         if(user != null) {
             return interestRepository.findAllByUsers_Username(username);
         }
@@ -50,7 +51,7 @@ public class InterestService {
     }
 
 
+    public void addInterestToUser(Long id, Principal principal) {
 
-
-
+    }
 }
