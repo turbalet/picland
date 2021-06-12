@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -36,6 +37,9 @@ public class User {
 
     @Column(name = "gender")
     private String gender;
+
+    @Column(name = "img_path")
+    private String imgPath;
 
     @OneToMany(targetEntity = Album.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     @JsonIgnore
@@ -157,12 +161,24 @@ public class User {
         this.roles = roles;
     }
 
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
+    }
+
+    public Optional<String> getUserProfileImageLink() {
+        return Optional.ofNullable(imgPath);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(userId, user.userId) && Objects.equals(username, user.username) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(firstName, user.firstName) && Objects.equals(last_name, user.last_name) && Objects.equals(gender, user.gender) && Objects.equals(albums, user.albums) && Objects.equals(picas, user.picas) && Objects.equals(interests, user.interests) && Objects.equals(roles, user.roles);
+        return Objects.equals(userId, user.userId) && Objects.equals(username, user.username) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(firstName, user.firstName) && Objects.equals(last_name, user.last_name) && Objects.equals(gender, user.gender) && Objects.equals(imgPath, user.imgPath) && Objects.equals(albums, user.albums) && Objects.equals(picas, user.picas) && Objects.equals(interests, user.interests) && Objects.equals(roles, user.roles);
     }
 
     @Override

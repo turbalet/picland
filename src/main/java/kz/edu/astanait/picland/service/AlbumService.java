@@ -56,6 +56,20 @@ public class AlbumService {
         }
     }
 
+    public List<Album> findUserAlbums(String username, Principal principal){
+        User currentUser = userRepository.findUserByUsername(principal.getName()).orElse(null);
+        User user = userRepository.findUserByUsername(username).orElse(null);
+        if (user != null){
+            if(user.getUserId().equals(currentUser.getUserId())){
+                return albumRepository.getAlbumsByUserUsername(username);
+            }
+            return albumRepository.getAlbumsByUserUserIdAndIsPrivateFalse(user.getUserId());
+        }
+        else {
+            throw new EntityNotFoundException(User.class, "username", username);
+        }
+    }
+
     public void saveAlbum(Album album){
         albumRepository.save(album);
     }

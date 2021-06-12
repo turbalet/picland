@@ -1,5 +1,6 @@
 package kz.edu.astanait.picland.controller;
 
+import kz.edu.astanait.picland.exception.EntityNotFoundException;
 import kz.edu.astanait.picland.model.Follower;
 import kz.edu.astanait.picland.model.User;
 import kz.edu.astanait.picland.service.FollowerService;
@@ -34,7 +35,10 @@ public class FollowerController {
             User currentUser = userService.findUserByUsername(principal.getName());
             followerService.doFollow(userId, currentUser);
             return ResponseEntity.ok("Successfully followed");
-        } catch (Exception e){
+        }catch (EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
@@ -45,7 +49,10 @@ public class FollowerController {
             User currentUser = userService.findUserByUsername(principal.getName());
             followerService.doUnFollow(userId, currentUser.getUserId());
             return ResponseEntity.ok("Successfully unfollowed");
-        } catch (Exception e){
+        }catch (EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }

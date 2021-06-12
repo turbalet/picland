@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -51,5 +52,15 @@ public class PicaService {
 
     public void deletePica(Long picaId){
         picaRepository.deleteById(picaId);
+    }
+
+    public List<Pica> getUserRecs(User user) {
+        if (user.getInterests().isEmpty()) {
+            return findAllPicas();
+        } else {
+            List<Long> interestIds = new ArrayList<>();
+            user.getInterests().forEach(interest -> interestIds.add(interest.getInterestId()));
+            return picaRepository.findAllByInterest_InterestIdIn(interestIds);
+        }
     }
 }

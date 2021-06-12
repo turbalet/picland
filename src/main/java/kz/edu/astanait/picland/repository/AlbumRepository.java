@@ -9,6 +9,7 @@ import java.util.List;
 @Repository
 public interface AlbumRepository extends JpaRepository<Album, Long> {
     List<Album> getAlbumsByUserUserId(long userId);
+    List<Album> getAlbumsByUserUsername(String username);
     List<Album> getAlbumByAlbumId(long albumId);
     List<Album> getAlbumsByUserUserIdAndIsPrivateFalse(long userId);
 }

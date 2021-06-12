@@ -1,5 +1,6 @@
 package kz.edu.astanait.picland.controller;
 
+import kz.edu.astanait.picland.exception.EntityNotFoundException;
 import kz.edu.astanait.picland.model.Role;
 import kz.edu.astanait.picland.model.User;
 import kz.edu.astanait.picland.model.UserDetailsImpl;
@@ -12,17 +13,17 @@ import kz.edu.astanait.picland.repository.UserRepository;
 import kz.edu.astanait.picland.security.jwt.JwtUtils;
 import kz.edu.astanait.picland.service.RefreshTokenService;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.parser.Entity;
 import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.Set;
@@ -30,9 +31,11 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api/v1/auth")
 @AllArgsConstructor
+@CrossOrigin
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
+
 
     private final UserRepository userRepository;
 
@@ -54,18 +57,22 @@ public class AuthController {
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        User user = userRepository.findUserByUsername(userDetails.getUsername()).orElse(null);
 //      List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
         return ResponseEntity.ok(new JwtResponse(
-                jwt, userDetails.getUsername(), refreshTokenService.generateRefreshToken().getToken()
+                jwt, userDetails.getUsername(), refreshTokenService.generateRefreshToken().getToken(), user.getUserId()
         ));
     }
 
-    @PostMapping("/refreshToken")
+    @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(@Valid @RequestBody RefreshTokenRequest request){
-        boolean isValid = refreshTokenService.validateRefreshToken(request.getRefreshToken());
+        System.out.println("Refreshing");
+        boolean isValid = refreshTokenService.validateRefreshToken(request.getRefresh());
+        User user = userRepository.findUserByUsername(request.getUsername()).orElse(null);
+
         if(isValid){
             String token = jwtUtils.generateTokenWithUsername(request.getUsername());
-            return ResponseEntity.ok(new JwtResponse(token, request.getUsername(), request.getRefreshToken()));
+            return ResponseEntity.ok(new JwtResponse(token, request.getUsername(), request.getRefresh(), user.getUserId()));
         }else {
             return ResponseEntity.status(400).body("Invalid refresh token");
         }
@@ -112,7 +119,7 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@Valid @RequestBody RefreshTokenRequest request){
-        refreshTokenService.deleteRefreshToken(request.getRefreshToken());
+        refreshTokenService.deleteRefreshToken(request.getRefresh());
         return ResponseEntity.ok("Refresh token successfully deleted");
     }
 }

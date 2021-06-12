@@ -2,21 +2,33 @@ package kz.edu.astanait.picland.controller;
 
 import kz.edu.astanait.picland.exception.EntityNotFoundException;
 import kz.edu.astanait.picland.model.Pica;
+import kz.edu.astanait.picland.model.User;
 import kz.edu.astanait.picland.service.PicaService;
+import kz.edu.astanait.picland.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/v1/picas")
 @AllArgsConstructor
 public class PicaController {
 
     private final PicaService picaService;
+
+    private final UserService userService;
+
+    @GetMapping("/rec")
+    public List<Pica> getUserRecs(Principal principal) {
+        User user = userService.findUserByUsername(principal.getName());
+        return picaService.getUserRecs(user);
+    }
 
 
     @PreAuthorize("hasRole('ADMIN')")

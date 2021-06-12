@@ -28,6 +28,10 @@ public class FollowerService {
         return followerRepository.existsByUser_UserIdAndFollower_UserId(userId, followerId);
     }
 
+    public long getUserFollowCount(Long followerId){
+        return followerRepository.countByFollower_UserId(followerId);
+    }
+
     public long getUserFollowersCount(Long userId){
         return followerRepository.countByUser_UserId(userId);
     }

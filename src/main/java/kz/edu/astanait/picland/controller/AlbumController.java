@@ -18,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/albums")
+@CrossOrigin
 @AllArgsConstructor
 public class AlbumController {
 
@@ -39,10 +40,16 @@ public class AlbumController {
         return albumService.findAlbum(id, principal);
     }
 
+//    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+//    @GetMapping("/user/{userId}")
+//    public List<Album> getUserAlbums(@PathVariable("userId") Long userId, Principal principal){
+//        return albumService.findUserAlbums(userId, principal);
+//    }
+
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    @GetMapping("/user/{userId}")
-    public List<Album> getUserAlbums(@PathVariable("userId") Long userId, Principal principal){
-        return albumService.findUserAlbums(userId, principal);
+    @GetMapping("/user/{username}")
+    public List<Album> getUserAlbums(@PathVariable("username") String username, Principal principal){
+        return albumService.findUserAlbums(username, principal);
     }
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
