@@ -1,57 +1,57 @@
+import search from '../images/search-white.png';
+import pin from '../images/pin.png';
+import Header from './header';
 import  { Component } from 'react'
-import PicaService from './services/PicaService';
-import './styles/index.css';
-import './js/decor.js';
-import search from './images/search-white.png';
-import pin from './images/pin.png';
-import Header from './components/header';
+import PicaService from '../services/PicaService';
+import '../styles/index.css';
+import '../js/decor.js';
+
 
 const logo = require('D:\\Python\\picland-front\\picland\\src\\images\\pin.png');
 
-export default class App extends Component {
+
+export default class result extends Component {
 
 
-	constructor(props) {
-		super(props)
-	
-		this.state = {
-			 picas: [],
-			 showCategoryLustBool : false
-		}
 
 
-		this.openCategoryList = this.openCategoryList.bind(this)
-	}
-	
-	componentDidMount() {
-		PicaService.getPicas()
-		.then(res => {
+
+    constructor(props) {
+        super(props)
+    
+        this.state = {
+             picas: []
+        }
+    }
+
+
+    componentDidMount() {
+		let word = this.props.location.search.split('=')[1];
+        console.log(this.props.location.search.split('=')[1]);
+		console.log(this.props);
+
+		PicaService.searchPicas(word).then(res => {
 			this.setState({
 				picas: res.data
 			});
-			console.log(res.data);
+		});
+    }
+
+	componentDidUpdate() {
+		let word = this.props.location.search.split('=')[1];
+
+		PicaService.searchPicas(word).then(res => {
+			this.setState({
+				picas: res.data
+			});
 		});
 	}
+    
 
-	openCategoryList() {
-		if (this.state.showCategoryLustBool) {
-			document.getElementById("categoryList").style.opacity = '1';
-			this.setState({
-				showCategoryLustBool: false
-			});
-		} else {
-			document.getElementById("categoryList").style.opacity = '0';
-			this.setState({
-				showCategoryLustBool: true
-			});
-		}
-	}
-
-
-	render() {
-		return (
-				<div>
-					<Header />
+    render() {
+        return (
+            <div>
+                    <Header />
 					<div className="album-layout">
 					{this.state.picas.map(pica =>
 						<div className="element">
@@ -77,9 +77,8 @@ export default class App extends Component {
 						</div>
 						
 					)}
-					</div>
 				</div>
-		)
-	}
+            </div>
+        )
+    }
 }
-
