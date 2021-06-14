@@ -54,8 +54,8 @@ export default class App extends Component {
 					<Header />
 					<div className="album-layout">
 					{this.state.picas.map(pica =>
-						<div className="element">
-							<img src={pica.url} alt="HAHA" />
+						<div className="element"  >
+							<img src={pica.url} alt="HAHA" onClick={() => {this.props.history.push("/pica/" + pica.picaId);}} />
 							<div className="whenhover">
 								<div onClick={this.openCategoryList} className="pin btn" style={{backgroundImage: "url(" + pin  + ")"}} ></div>
 									<ul className="categoryList" id="categoryList">

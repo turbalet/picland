@@ -9,6 +9,10 @@ import Logout from './components/logout';
 import Profile from './components/profile';
 import Settings from './components/settings';
 import result from './components/result';
+import album from './components/album';
+import CreateAlbum from './components/create_album';
+import EditAlbum from './components/edit_album';
+import Pica from './components/pica';
 
 
 
@@ -24,7 +28,10 @@ const routing = (
 				<Route path="/profile" component={Profile} />
 				<Route path="/settings" component={Settings} />
 				<Route path="/search" component={result} />
-
+				<Route path="/album" component={album} />
+				<Route path="/new/album" component={CreateAlbum} />
+				<Route path="/edit/album" component={EditAlbum} />
+				<Route path="/pica" component={Pica} />
 			</Switch>
 		</React.StrictMode>
 	</Router>

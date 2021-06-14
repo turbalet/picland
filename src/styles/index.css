@@ -16,7 +16,10 @@ html {
 
 body {
     background-color: black;
+    height: 100%;
 }
+
+
 
 .head {
     width: 100%;
@@ -92,15 +95,20 @@ body {
 .album-layout .element {
     width: 100%;
     margin-bottom: 20px;
-    
+    display: inline-block;
     position: relative;
     
 }
 
-.element {
+.album-layout .element:hover {
+    cursor: pointer;
+    
+}
+
+/* .element {
     display: inline-block;
     font-size: 5px;
-}
+} */
 
 .album-layout .element img {
     border-radius: 10px;

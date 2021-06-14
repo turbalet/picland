@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const baseURL = 'http://127.0.0.1:8080/api/v1/auth';
 
+
 const axiosInstance = axios.create({
 	baseURL: baseURL,
 	timeout: 5000,
@@ -13,6 +14,8 @@ const axiosInstance = axios.create({
 		accept: 'application/json',
 	}, 
 });
+
+
 
 axiosInstance.interceptors.response.use(
 	(response) => {
