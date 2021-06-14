@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/v1/comments")
 @AllArgsConstructor
 public class CommentController {
@@ -50,10 +51,11 @@ public class CommentController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @PostMapping("/pica/{picaId}")
     public ResponseEntity<?> writeComment(@PathVariable("picaId") Long picaId,
-                                       @RequestBody CommentDto commentDto,
+                                       @RequestBody String message,
                                        Principal principal){
         try{
-            Comment comment = modelMapper.map(commentDto, Comment.class);
+            Comment comment = new Comment();
+            comment.setMessage(message);
             comment.setUser(userService.findUserByUsername(principal.getName()));
             comment.setPica(picaService.findPica(picaId));
             comment.setCommentDate(new Date());

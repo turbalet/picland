@@ -8,10 +8,13 @@ import kz.edu.astanait.picland.service.UserService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -52,22 +55,22 @@ public class AlbumController {
         return albumService.findUserAlbums(username, principal);
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    @PostMapping("")
-    public ResponseEntity<?> createAlbum(@RequestBody AlbumDto albumDto, Principal principal){
-        try{
-            Album album = modelMapper.map(albumDto, Album.class);
-            album.setUser(userService.findUserByUsername(principal.getName()));
-            albumService.saveAlbum(album);
-            return ResponseEntity.ok(album);
-        }
-        catch (EntityNotFoundException e){
-            throw e;
-        }
-        catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-    }
+//    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+//    @PostMapping("")
+//    public ResponseEntity<?> createAlbum(@RequestBody AlbumDto albumDto, Principal principal){
+//        try{
+//            Album album = modelMapper.map(albumDto, Album.class);
+//            album.setUser(userService.findUserByUsername(principal.getName()));
+//            albumService.saveAlbum(album);
+//            return ResponseEntity.ok(album);
+//        }
+//        catch (EntityNotFoundException e){
+//            throw e;
+//        }
+//        catch (Exception e){
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+//        }
+//    }
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @PutMapping("")
@@ -81,6 +84,17 @@ public class AlbumController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    @PostMapping()
+    public void newAlbum(Principal principal,
+                         @RequestParam("file") MultipartFile file,
+                         @RequestParam("albumName") String albumName) throws IOException {
+        albumService.createAlbum(principal.getName(), file, albumName);
+//        albumService.createAlbum(principal.getName(), file,modelMapper.map(albumDto, Album.class));
+    }
+
+
 
     @PreAuthorize("#ownerId == principal.getUser().userId or hasRole('ADMIN')")
     @DeleteMapping("/remove/{id}/owner/{ownerId}")

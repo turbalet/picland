@@ -38,6 +38,7 @@ public class Album {
     @JoinTable(name = "pica_albums",
             joinColumns = @JoinColumn(name = "album_id"),
             inverseJoinColumns = @JoinColumn(name = "pica_id"))
-    @JsonIgnore
+
+
     private Set<Pica> picas = new HashSet<>();
 }

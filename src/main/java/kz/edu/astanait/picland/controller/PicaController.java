@@ -31,7 +31,6 @@ public class PicaController {
     }
 
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public List<Pica> getAllPicas() {
         return picaService.findAllPicas();
